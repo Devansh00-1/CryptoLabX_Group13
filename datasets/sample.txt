@@ -1,0 +1,3 @@
+The quick brown fox jumps over the lazy dog.
+Cryptography is the art of writing and solving codes.
+Hello World from CryptoLabX Group Thirteen.

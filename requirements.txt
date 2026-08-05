@@ -1,0 +1,9 @@
+# Core dependencies
+numpy
+pytest
+
+# Optional: visualization for analysis
+matplotlib
+
+# Optional: data handling
+pandas
