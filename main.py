@@ -16,12 +16,33 @@ DATASETS_DIR = Path(__file__).parent / "datasets"
 LOG_FILE = Path(__file__).parent / "outputs" / "execution_log.txt"
 
 
-def log_menu_selection(menu_option: str) -> None:
-    """Append the selected menu option and timestamp to the execution log."""
+def start_session_log() -> None:
+    """Write a session header to the execution log indicating a new run."""
+    LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
+    ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    sep = "=" * 60
+    with LOG_FILE.open("a", encoding="utf-8") as file:
+        file.write("\n")
+        file.write(sep + "\n")
+        file.write(f"  SESSION STARTED  [{ts}]\n")
+        file.write(sep + "\n")
+
+
+def log_menu_selection(action: str, detail: str | None = None) -> None:
+    """Append a formatted action line to the execution log.
+
+    Examples:
+      [2026-08-04 20:37:10]  ACTION: ANALYZE  |  DETAIL: data1.txt
+      [2026-08-04 20:37:18]  ACTION: EXIT
+    """
     LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    if detail:
+        line = f"[{timestamp}]  ACTION: {action}  |  DETAIL: {detail}\n"
+    else:
+        line = f"[{timestamp}]  ACTION: {action}\n"
     with LOG_FILE.open("a", encoding="utf-8") as file:
-        file.write(f"{timestamp} - {menu_option}\n")
+        file.write(line)
 
 
 def initialize_datasets() -> None:
@@ -58,7 +79,7 @@ def display_menu() -> None:
     print("=======================")
 
 
-def handle_analyze() -> None:
+def handle_analyze() -> Path | None:
     """Run the file analysis task on a text file in the datasets folder."""
     print("\nAvailable datasets:")
     files = sorted(
@@ -67,7 +88,8 @@ def handle_analyze() -> None:
     )
     if not files:
         print("No text files found in the datasets folder.")
-        return
+        log_menu_selection("ANALYZE", detail="NO_DATASETS")
+        return None
 
     for i, f in enumerate(files, start=1):
         print(f"  {i}. {f.name}")
@@ -75,20 +97,25 @@ def handle_analyze() -> None:
     choice = input("Select a file number (or press Enter to skip): ").strip()
     if not choice:
         print("Analysis cancelled.")
-        return
+        log_menu_selection("ANALYZE_CANCELLED")
+        return None
 
     try:
         index = int(choice) - 1
         if index < 0 or index >= len(files):
             print("Invalid selection.")
-            return
+            log_menu_selection("ANALYZE_INVALID_SELECTION", detail=choice)
+            return None
         selected = files[index]
     except ValueError:
         print("Invalid input. Please enter a number.")
-        return
+        log_menu_selection("ANALYZE_INVALID_INPUT", detail=choice)
+        return None
 
     analyzer = FileAnalyzer(str(selected))
     analyzer.print_report()
+    log_menu_selection("ANALYZE", detail=selected.name)
+    return selected
 
 
 def ask_sample_file() -> None:
@@ -118,23 +145,30 @@ def main() -> None:
     # Ensure the datasets folder contains required sample files
     initialize_datasets()
 
+    # Start a new session entry in the log
+    start_session_log()
+
     while True:
         display_menu()
         choice = input("Enter your choice: ").strip()
-        log_menu_selection(choice)
 
         if choice == "1":
+            log_menu_selection("ENCRYPT")
             coming_soon()  # Encrypt
         elif choice == "2":
+            log_menu_selection("DECRYPT")
             coming_soon()  # Decrypt
         elif choice == "3":
+            log_menu_selection("ATTACK")
             coming_soon()  # Attack
         elif choice == "4":
             handle_analyze()  # Analyze
         elif choice == "5":
+            log_menu_selection("EXIT")
             print("Goodbye!")
             break
         else:
+            log_menu_selection("INVALID")
             print("Invalid choice. Please try again.")
 
 

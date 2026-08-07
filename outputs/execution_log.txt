@@ -1,1 +1,27 @@
-2026-08-05 23:10:09 - 5
+============================================================
+	SESSION STARTED  [2026-08-05 23:59:00]
+============================================================
+[2026-08-05 23:59:02]  ACTION: ANALYZE  |  DETAIL: dataset1.txt
+[2026-08-05 23:59:10]  ACTION: EXIT
+
+[2026-08-05 23:49:45]  ACTION: ATTACK
+[2026-08-05 23:49:55]  ACTION: ANALYZE  |  DETAIL: dataset2.txt
+[2026-08-05 23:49:57]  ACTION: ANALYZE  |  DETAIL: dataset1.txt
+[2026-08-05 23:50:00]  ACTION: ANALYZE  |  DETAIL: dataset3.txt
+[2026-08-05 23:50:05]  ACTION: ANALYZE  |  DETAIL: dataset1.txt
+[2026-08-05 23:50:08]  ACTION: ANALYZE  |  DETAIL: dataset2.txt
+[2026-08-05 23:50:10]  ACTION: ANALYZE  |  DETAIL: dataset3.txt
+
+============================================================
+  SESSION STARTED  [2026-08-05 23:52:59]
+============================================================
+[2026-08-05 23:53:04]  ACTION: ANALYZE  |  DETAIL: dataset2.txt
+[2026-08-05 23:53:08]  ACTION: ANALYZE  |  DETAIL: dataset4.txt
+
+============================================================
+  SESSION STARTED  [2026-08-05 23:53:12]
+============================================================
+[2026-08-05 23:53:18]  ACTION: ANALYZE  |  DETAIL: dataset5.txt
+[2026-08-05 23:53:22]  ACTION: ANALYZE  |  DETAIL: dataset1.txt
+[2026-08-05 23:53:28]  ACTION: ANALYZE  |  DETAIL: dataset5.txt
+[2026-08-05 23:53:32]  ACTION: EXIT
