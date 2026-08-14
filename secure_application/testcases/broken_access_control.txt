@@ -1,0 +1,2 @@
+-- Broken access control testcases (placeholders)
+Attempt to access /admin as non-admin

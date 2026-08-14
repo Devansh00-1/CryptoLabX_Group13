@@ -1,0 +1,2 @@
+-- SQL Injection testcases (placeholders)
+1' OR '1'='1
