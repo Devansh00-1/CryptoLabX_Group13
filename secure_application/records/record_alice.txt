@@ -1,0 +1,4 @@
+Patient: Alice Smith
+DOB: 1990-01-01
+Notes:
+- 2026-01-10: Annual checkup. All normal.
