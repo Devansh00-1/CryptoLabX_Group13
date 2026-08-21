@@ -10,6 +10,9 @@ from datetime import datetime
 from pathlib import Path
 
 from analysis.file_analyzer import FileAnalyzer
+from attacks.shift_cipher_attack.src.brute_force_dictionary import dictionary_attack
+from attacks.shift_cipher_attack.src.chi_square_attack import break_shift_cipher_chi_square
+from attacks.shift_cipher_attack.src.shift_cipher import decrypt, encrypt
 
 # Path to the datasets folder relative to this file
 DATASETS_DIR = Path(__file__).parent / "datasets"
@@ -132,9 +135,53 @@ def ask_sample_file() -> None:
         )
 
 
-def coming_soon() -> None:
-    """Placeholder for unimplemented menu options."""
-    print("Coming Soon.")
+def handle_encrypt() -> None:
+    """Encrypt text with a Caesar shift."""
+    plaintext = input("Enter plaintext: ")
+    try:
+        shift = int(input("Enter shift (integer): ").strip())
+    except ValueError:
+        print("Invalid shift. Please enter an integer.")
+        return
+
+    print(f"Ciphertext: {encrypt(plaintext, shift)}")
+    log_menu_selection("ENCRYPT", detail=f"shift={shift}")
+
+
+def handle_decrypt() -> None:
+    """Decrypt text with a Caesar shift."""
+    ciphertext = input("Enter ciphertext: ")
+    try:
+        shift = int(input("Enter shift (integer): ").strip())
+    except ValueError:
+        print("Invalid shift. Please enter an integer.")
+        return
+
+    print(f"Plaintext: {decrypt(ciphertext, shift)}")
+    log_menu_selection("DECRYPT", detail=f"shift={shift}")
+
+
+def handle_attack() -> None:
+    """Run dictionary and chi-square attacks against ciphertext."""
+    ciphertext = input("Enter ciphertext: ")
+    dictionary_path = (
+        Path(__file__).parent
+        / "attacks"
+        / "shift_cipher_attack"
+        / "dictionary"
+        / "english_words.txt"
+    )
+    candidates = dictionary_attack(ciphertext, dictionary_path=dictionary_path)
+    likely_shift, likely_plaintext = break_shift_cipher_chi_square(ciphertext)
+
+    print("\nBest dictionary candidate:")
+    print(f"  Shift: {candidates[0].shift}")
+    print(f"  Score: {candidates[0].score}")
+    print(f"  Plaintext: {candidates[0].plaintext}")
+    print("\nBest chi-square candidate:")
+    print(f"  Shift: {likely_shift}")
+    print(f"  Plaintext: {likely_plaintext}")
+    log_menu_selection("ATTACK", detail="dictionary+chi_square")
 
 
 def main() -> None:
@@ -153,14 +200,11 @@ def main() -> None:
         choice = input("Enter your choice: ").strip()
 
         if choice == "1":
-            log_menu_selection("ENCRYPT")
-            coming_soon()  # Encrypt
+            handle_encrypt()
         elif choice == "2":
-            log_menu_selection("DECRYPT")
-            coming_soon()  # Decrypt
+            handle_decrypt()
         elif choice == "3":
-            log_menu_selection("ATTACK")
-            coming_soon()  # Attack
+            handle_attack()
         elif choice == "4":
             handle_analyze()  # Analyze
         elif choice == "5":

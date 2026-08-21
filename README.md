@@ -77,7 +77,8 @@ A modular cryptography learning and experimentation lab. CryptoLabX provides an 
    ```
 
 4. Select an option by entering its number:
-   - **1 / 2 / 3** — Encrypt, Decrypt, Attack (currently display "Coming Soon")
+   - **1 / 2** — Encrypt and decrypt text with a Caesar shift
+   - **3** — Attack shift-cipher text with dictionary scoring and chi-square analysis
    - **4** — Analyze a text file from the `datasets` folder
    - **5** — Exit the program
 
@@ -111,9 +112,9 @@ A modular cryptography learning and experimentation lab. CryptoLabX provides an 
 
 Running `python main.py` starts an interactive menu with the following options:
 
-1. **Encrypt** — Coming soon
-2. **Decrypt** — Coming soon
-3. **Attack** — Coming soon
+1. **Encrypt** — Encrypts text with a Caesar shift
+2. **Decrypt** — Decrypts text with a Caesar shift
+3. **Attack** — Ranks candidates with dictionary scoring and chi-square analysis
 4. **Analyze** — Analyzes a text file from the `datasets` folder
 5. **Exit** — Exits the program
 
