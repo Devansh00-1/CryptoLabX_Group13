@@ -5,6 +5,11 @@ import database
 import auth
 from typing import Optional
 
+def read_file():
+    filename = input("Enter filename: ")
+
+    with open("uploads/" + filename, "r") as f:
+        print(f.read())
 
 HEADER = "=" * 39 + "\n       HOSPITAL MANAGEMENT SYSTEM\n" + "=" * 39
 
@@ -131,27 +136,19 @@ def add_prescription_flow(current_user):
 
 def view_medical_records_flow():
     pid = prompt_int("Patient ID to view records: ")
+
     patient = database.get_patient(pid)
+
     if not patient:
         print("Invalid patient ID")
         return
-    print(f"Medical records for {patient['name']}:")
-    records = database.list_medical_records_by_patient(pid)
-    if not records:
-        print("No medical records found.")
-    else:
-        for r in records:
-            doc = r.get('doctor_name') or 'System'
-            print(f"- {r['created_at']}: by {doc} | {r['note']}")
-    print("Prescriptions:")
-    pres = database.list_prescriptions_by_patient(pid)
-    if not pres:
-        print("No prescriptions.")
-    else:
-        for p in pres:
-            doc = p.get('doctor_name') or 'Unknown'
-            print(f"- {p['created_at']}: by {doc} | {p['medication']} | {p['instructions']}")
 
+    print(f"Medical records for {patient['name']}:")
+
+    records = database.list_medical_records_by_patient(pid)
+
+    for r in records:
+        print(f"- {r['created_at']}: {r['note']}")
 
 def billing_flow(current_user):
     pid = prompt_int("Patient ID for bill: ")
@@ -190,7 +187,7 @@ def main_loop():
     current_user = None
     while True:
         print("\n" + HEADER)
-        print("\n1. Login\n2. Register Patient\n3. View Patients\n4. Book Appointment\n5. View Appointments\n6. Add Prescription\n7. View Medical Records\n8. Generate/View Bill\n9. Exit\n")
+        print("\n1. Login\n2. Register Patient\n3. View Patients\n4. Book Appointment\n5. View Appointments\n6. Add Prescription\n7. View Medical Records\n8. Generate/View Bill\n9. Read File\n10. Exit")
         try:
             choice = input("Select option: ").strip()
         except (EOFError, KeyboardInterrupt):
@@ -236,10 +233,10 @@ def main_loop():
                 continue
             billing_flow(current_user)
         elif choice == '9':
+            read_file()
+        else:
             print("Goodbye")
             return
-        else:
-            print("Invalid option. Choose 1-9.")
 
 
 def main():

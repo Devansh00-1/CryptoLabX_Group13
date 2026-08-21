@@ -16,6 +16,12 @@ def get_conn():
 def _hash_text(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
+def vulnerable_search(name):
+    conn = get_conn()
+    cur = conn.cursor()
+    query = "SELECT * FROM patients WHERE name = '" + name + "'"
+    cur.execute(query)
+    return cur.fetchall()
 
 def init_db():
     """Create tables and seed initial users if needed."""
