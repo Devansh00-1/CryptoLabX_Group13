@@ -13,6 +13,10 @@ from analysis.file_analyzer import FileAnalyzer
 from attacks.shift_cipher_attack.src.brute_force_dictionary import dictionary_attack
 from attacks.shift_cipher_attack.src.chi_square_attack import break_shift_cipher_chi_square
 from attacks.shift_cipher_attack.src.shift_cipher import decrypt, encrypt
+from attacks.vigenere_cipher_attack.src.vigenere_cryptanalysis import (
+    analyze_vigenere,
+    kasiski_analysis,
+)
 
 # Path to the datasets folder relative to this file
 DATASETS_DIR = Path(__file__).parent / "datasets"
@@ -78,7 +82,8 @@ def display_menu() -> None:
     print("2. Decrypt")
     print("3. Attack")
     print("4. Analyze")
-    print("5. Exit")
+    print("5. Vigenere cryptanalysis")
+    print("6. Exit")
     print("=======================")
 
 
@@ -184,6 +189,36 @@ def handle_attack() -> None:
     log_menu_selection("ATTACK", detail="dictionary+chi_square")
 
 
+def handle_vigenere_attack() -> None:
+    """Run Kasiski and frequency analysis against a Vigenere ciphertext."""
+    ciphertext = input("Enter Vigenere ciphertext: ")
+    try:
+        cleaned = ciphertext.strip()
+        if not cleaned:
+            raise ValueError("ciphertext cannot be empty")
+        candidates = kasiski_analysis(cleaned)
+        print(f"\nKasiski candidate key lengths: {', '.join(map(str, candidates[:5]))}")
+        selected = input(
+            f"Enter key length (press Enter for {candidates[0]}): "
+        ).strip()
+        key_length = int(selected) if selected else candidates[0]
+        length, tables, key, plaintext, verified = analyze_vigenere(
+            cleaned, key_length=key_length
+        )
+    except ValueError as error:
+        print(f"Invalid Vigenere input: {error}")
+        return
+
+    print(f"\nEstimated key length: {length}")
+    for group_number, table in enumerate(tables, start=1):
+        frequencies = " ".join(f"{letter}:{table[letter]}" for letter in table)
+        print(f"Group {group_number}: {frequencies}")
+    print(f"Recovered key: {key}")
+    print(f"Recovered plaintext: {plaintext}")
+    print(f"Verification: {'PASS' if verified else 'FAIL'}")
+    log_menu_selection("VIGENERE_ATTACK", detail=f"key_length={length}")
+
+
 def main() -> None:
     """Run the menu-driven command-line interface."""
     print("CryptoLabX_Group13")
@@ -208,6 +243,8 @@ def main() -> None:
         elif choice == "4":
             handle_analyze()  # Analyze
         elif choice == "5":
+            handle_vigenere_attack()
+        elif choice == "6":
             log_menu_selection("EXIT")
             print("Goodbye!")
             break

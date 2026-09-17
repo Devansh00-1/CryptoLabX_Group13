@@ -72,7 +72,8 @@ A modular cryptography learning and experimentation lab. CryptoLabX provides an 
    2. Decrypt
    3. Attack
    4. Analyze
-   5. Exit
+   5. Vigenere cryptanalysis
+   6. Exit
    =======================
    ```
 
@@ -80,7 +81,10 @@ A modular cryptography learning and experimentation lab. CryptoLabX provides an 
    - **1 / 2** — Encrypt and decrypt text with a Caesar shift
    - **3** — Attack shift-cipher text with dictionary scoring and chi-square analysis
    - **4** — Analyze a text file from the `datasets` folder
-   - **5** — Exit the program
+   - **5** — Estimate a Vigenere key length with Kasiski examination, print
+     per-group frequency tables, recover a key, decrypt, and verify by
+     re-encryption
+   - **6** — Exit the program
 
 5. Run the unit tests:
    ```bash
@@ -116,7 +120,9 @@ Running `python main.py` starts an interactive menu with the following options:
 2. **Decrypt** — Decrypts text with a Caesar shift
 3. **Attack** — Ranks candidates with dictionary scoring and chi-square analysis
 4. **Analyze** — Analyzes a text file from the `datasets` folder
-5. **Exit** — Exits the program
+5. **Vigenere cryptanalysis** — Performs Kasiski examination and frequency
+   analysis against a Vigenere ciphertext
+6. **Exit** — Exits the program
 
 ### File Analyzer
 
@@ -129,6 +135,14 @@ The **Analyze** option reads a text file from the `datasets` folder and reports:
 - Letter frequency (A–Z, case-insensitive)
 
 A sample file `datasets/sample.txt` is provided for demonstration.
+
+### Vigenere cryptanalysis
+
+Select **Vigenere cryptanalysis** and paste the supplied ciphertext. The tool
+normalizes the input, ranks key-length candidates using repeated-pattern
+distances and average Index of Coincidence, performs chi-square frequency
+analysis for each key position, and prints the recovered plaintext and
+re-encryption verification.
 
 ### Monoalphabetic substitution cipher (C++ assignment)
 
