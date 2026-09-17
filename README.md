@@ -130,6 +130,20 @@ The **Analyze** option reads a text file from the `datasets` folder and reports:
 
 A sample file `datasets/sample.txt` is provided for demonstration.
 
+### Monoalphabetic substitution cipher (C++ assignment)
+
+The complete substitution-cipher workflow is in
+`classical/monoalphabetic_cipher`. It is intentionally implemented in C++17
+using only the standard library. It encrypts a plaintext file with a randomly
+generated key, reports letter/word/pattern statistics, accepts iterative
+cryptanalysis hypotheses, and verifies exact re-encryption.
+
+```bash
+cd classical/monoalphabetic_cipher
+make
+./monoalphabetic_cipher --plaintext-file ../../datasets/your_one_page.txt
+```
+
 ---
 
 ## Screenshots
