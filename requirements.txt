@@ -7,3 +7,6 @@ matplotlib
 
 # Optional: data handling
 pandas
+
+# Independent primality verification for math.prime_generation
+sympy
